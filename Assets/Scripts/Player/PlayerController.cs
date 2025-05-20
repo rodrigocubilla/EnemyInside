@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private TrailRenderer trail;
     [SerializeField] private int lives;
+    public int Lives { get => lives; private set => lives = value; }
     
     public int moves = 10;
 
@@ -35,11 +36,14 @@ public class PlayerController : MonoBehaviour
     private bool canPushUp;
     private bool canPushDown;
 
+    private SceneLoader sceneLoader;
+
     private bool canMove = true;
     public bool monsterMode = false;
     private int startMoves;
 
     public bool isDead = false;
+    public bool isResetting = false;
 
     private RaycastHit2D hitPushableRight;
     private RaycastHit2D hitPushableLeft;
@@ -55,13 +59,15 @@ public class PlayerController : MonoBehaviour
         };
 
         pathFinding.OnCantReachPosition += () => {
-            HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Human);
+            HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
             moves = startMoves;
             MaskReveal.OnRevealMask.Invoke();
             monsterMode = false;
         };
 
         HUDLives.OnLifeChange?.Invoke(lives);
+
+        sceneLoader = SceneLoader.instance;
     }
 
     private void FixedUpdate() 
@@ -118,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
         if (killZone == null && lava == null)
         {
-            HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Human);
+            HUDEventReciever.InvokeChangeMode(PlayerMode.Human);
             moves = startMoves;
             MaskReveal.OnRevealMask.Invoke();
             monsterMode = false;
@@ -136,10 +142,15 @@ public class PlayerController : MonoBehaviour
         if (OnReset)
         {
             monsterMode = false;
-            HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Human);
+            HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
             MaskReveal.OnHideMask.Invoke();
             lives = 5;
             HUDLives.OnLifeChange.Invoke(lives);
+
+            Debug.Log("Lanzar Evento Reset");
+            int sceneId = SceneLoader.instance.actualSceneID;
+            bool didMove = moves > 0;
+            sceneLoader.isResetting = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);   
         }
 
@@ -158,7 +169,7 @@ public class PlayerController : MonoBehaviour
             monsterMode = !monsterMode;
             if (monsterMode)
             {
-                HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Monster);
+                HUDEventReciever.InvokeChangeMode(PlayerMode.Monster);
 
                 StartCoroutine(WaitFor(() => {
                     GoToRandomKillZone();
@@ -167,7 +178,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Human);
+                HUDEventReciever.InvokeChangeMode(PlayerMode.Human);
             }
         }
 
@@ -274,12 +285,15 @@ public class PlayerController : MonoBehaviour
         func.Invoke();
     }
 
-    public void Kill()
+    public void Kill(string zone)
     {
         isDead = true;
         deadParticles.transform.position = transform.position;
         deadParticles.Play();
         StartCoroutine(RespawnAfterSeconds(1f));
+
+        string mode = monsterMode ? "Monster" : "Human";
+        Debug.Log($"Lanzar evento Death. Modo: {mode}. Zona: {zone}");
     }
 
     private IEnumerator RespawnAfterSeconds(float seconds)
@@ -294,7 +308,7 @@ public class PlayerController : MonoBehaviour
         moves = startMoves;
         MaskReveal.OnHideMask.Invoke();
         monsterMode = false;
-        HUDEventReciever.OnChangeMode.Invoke(PlayerMode.Human);
+        HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
         lives--;
         HUDLives.OnLifeChange.Invoke(lives);
     }

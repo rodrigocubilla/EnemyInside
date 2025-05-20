@@ -18,7 +18,7 @@ public class HUDMovesView : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    private void OnChangeMode(PlayerMode mode)
+    private void OnChangeMode(PlayerMode mode, bool shouldInvokeHuman)
     {
         switch (mode)
         {

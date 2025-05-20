@@ -29,7 +29,7 @@ public class Lava : MonoBehaviour
         if (collider?.gameObject.tag == "Player")
         {   
             if (!collider.GetComponent<PlayerController>().isDead)
-                collider.GetComponent<PlayerController>().Kill();
+                collider.GetComponent<PlayerController>().Kill("Lava");
         }
 
         blocked = blockedRight && blockedLeft && blockedUp && blockedDown;

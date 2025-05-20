@@ -10,21 +10,21 @@ using UnityEditor;
 public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader instance {private set; get;}
+    public bool isResetting = false;
+    public int actualSceneID { get; private set; }
 
     private AsyncOperation _asyncOperation;
 
     [SerializeField] private List<string> scenes = new List<string>();
-    [SerializeField] private string actualScene;
+    
 
     private void Awake() {
         DontDestroyOnLoad(this);
 
         instance = this;
-
-        actualScene = SceneManager.GetActiveScene().name;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnValidate() {
         scenes = new List<string>();
 
@@ -35,6 +35,24 @@ public class SceneLoader : MonoBehaviour
     }
     #endif
 
+    private void OnEnable()
+    => SceneManager.sceneLoaded += OnSceneLoaded;
+
+    private void OnDisable()
+        => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex > 1)
+        {
+            if (!isResetting)
+            {
+                actualSceneID = scene.buildIndex - 2;
+                Debug.Log($"Lanzar Level Start: {scene.name} id: {actualSceneID}");
+            }
+        }
+    }
+
     public void StartLoadingScene(string sceneName)
     {
         StartCoroutine(LoadSceneAsyncProcess(sceneName));
@@ -42,8 +60,6 @@ public class SceneLoader : MonoBehaviour
 
     public void StartLoadingNextScene()
     {
-        actualScene = SceneManager.GetActiveScene().name;
-
         string nextScene = scenes[scenes.IndexOf(SceneManager.GetActiveScene().name) + 1];
 
         StartCoroutine(LoadSceneAsyncProcess(nextScene));
@@ -68,9 +84,9 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator ActivateSceneAndDeactivate()
     {
-        Debug.Log("Dale");
         yield return new WaitUntil( () => {return _asyncOperation.progress > 0.8f;} );
         _asyncOperation.allowSceneActivation = true;
+        isResetting = false;
         yield return new WaitUntil( () => {return _asyncOperation.isDone;} );
         _asyncOperation.allowSceneActivation = false;
     }

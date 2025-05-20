@@ -40,12 +40,12 @@ public class Box : MonoBehaviour
             if (player.monsterMode)
             {
                 gameObject.layer = LayerMask.NameToLayer("Solids");
-                Debug.Log("Cambiado a layer Solids");
+                //Debug.Log("Cambiado a layer Solids");
             }
             else
             {
                 gameObject.layer = LayerMask.NameToLayer("Pushable");
-                Debug.Log("Cambiado a layer Pushable");
+                //Debug.Log("Cambiado a layer Pushable");
             }
         }
         RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, .5f, solidLayers); 

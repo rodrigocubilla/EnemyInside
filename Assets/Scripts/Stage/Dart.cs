@@ -24,7 +24,7 @@ public class Dart : MonoBehaviour
         {   
             if (!collider.GetComponent<PlayerController>().isDead)
             {
-                collider.GetComponent<PlayerController>().Kill();
+                collider.GetComponent<PlayerController>().Kill("Dart");
                 Destroy(gameObject);
             }
         }

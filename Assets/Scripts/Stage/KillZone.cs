@@ -44,7 +44,7 @@ public class KillZone : MonoBehaviour
         if (collider?.gameObject.tag == "Player")
         {   
             if (!collider.GetComponent<PlayerController>().isDead)
-                collider.GetComponent<PlayerController>().Kill();
+                collider.GetComponent<PlayerController>().Kill("Spike");
         }
 
         if(!hasPointToBlock)

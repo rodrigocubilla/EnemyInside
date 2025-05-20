@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum PlayerMode
 {
@@ -14,16 +15,33 @@ public class HUDEventReciever : MonoBehaviour
 {
     [SerializeField] private TextMeshPro text;
 
-    public static Action<PlayerMode> OnChangeMode;
+    public static Action<PlayerMode, bool> OnChangeMode;
     public static Action<int> OnPlayerMove;
+
+    private int count = 0;
 
     private void Awake() {
         OnChangeMode += OnChangeModeHandler;
 
         DontDestroyOnLoad(this);
     }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-    private void OnChangeModeHandler(PlayerMode mode)
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!SceneLoader.instance.isResetting)
+            count = 0;
+    }
+
+    private void OnChangeModeHandler(PlayerMode mode, bool shouldInvokeHuman)
     {
         switch (mode)
         {
@@ -31,8 +49,24 @@ public class HUDEventReciever : MonoBehaviour
                 text.text = "MONSTER TURN";
                 break;
             case PlayerMode.Human:
+                if (shouldInvokeHuman)
+                {
+                    count++;
+                    int sceneId = SceneLoader.instance.actualSceneID;
+                    Debug.Log($"Lanzar Evento Human count: {count}");
+                }
                 text.text = "HUMAN TURN";
                 break;
         }
+    }
+
+    public static void InvokeChangeMode(PlayerMode mode)
+    {
+        OnChangeMode?.Invoke(mode, true);
+    }
+
+    public static void InvokeChangeMode(PlayerMode mode, bool shouldInvokeHuman)
+    {
+        OnChangeMode?.Invoke(mode, shouldInvokeHuman);
     }
 }
