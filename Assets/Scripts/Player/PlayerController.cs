@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
+using static EventManager;
 using UnityEngine.SceneManagement;
+using Unity.Services.Analytics;
 
 public class PlayerController : MonoBehaviour
 {
@@ -147,9 +147,16 @@ public class PlayerController : MonoBehaviour
             lives = 5;
             HUDLives.OnLifeChange.Invoke(lives);
 
-            Debug.Log("Lanzar Evento Reset");
             int sceneId = SceneLoader.instance.actualSceneID;
             bool didMove = moves > 0;
+            ResetEvent reset = new ResetEvent
+            {
+                level = sceneId,
+                move = didMove
+
+            };
+            Debug.Log($"Lanzar Evento Reset lvl:{sceneId}, move: {didMove}");
+            AnalyticsService.Instance.RecordEvent(reset);
             sceneLoader.isResetting = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);   
         }
@@ -293,6 +300,12 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(RespawnAfterSeconds(1f));
 
         string mode = monsterMode ? "Monster" : "Human";
+        DeathEvent death = new DeathEvent
+        {
+            mode = mode,
+            killZone = zone,
+        };
+        AnalyticsService.Instance.RecordEvent(death);
         Debug.Log($"Lanzar evento Death. Modo: {mode}. Zona: {zone}");
     }
 

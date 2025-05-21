@@ -1,5 +1,8 @@
+using Unity.Services.Analytics;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
+using static EventManager;
 
 public class WinBlock : MonoBehaviour
 {
@@ -7,8 +10,9 @@ public class WinBlock : MonoBehaviour
 
     private void Awake()
     {
-        playerLives = FindObjectOfType<PlayerController>().Lives;
+        playerLives = FindFirstObjectByType<PlayerController>().Lives;
     }
+
     private void FixedUpdate() {
         Collider2D collider = Physics2D.OverlapBox(transform.position, new Vector2(0.2f, 0.2f), 0f);
 
@@ -19,10 +23,21 @@ public class WinBlock : MonoBehaviour
             if (SceneManager.GetActiveScene().buildIndex != 9)
             {
                 int losingLives = 5 - playerLives;
+                LevelCompleteEvent levelComplete = new LevelCompleteEvent
+                {
+                    level = SceneLoader.instance.actualSceneID,
+                    live = losingLives,
+                };
+                AnalyticsService.Instance.RecordEvent(levelComplete);
                 Debug.Log("Lanzar Level Complete");
             }
             else
             {
+                GameOverEvent gameOver = new GameOverEvent
+                {
+                    live = playerLives,
+                };
+                AnalyticsService.Instance.RecordEvent(gameOver);
                 Debug.Log("Lanzar Evento Game Over");
             }
 

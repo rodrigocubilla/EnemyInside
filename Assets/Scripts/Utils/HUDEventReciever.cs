@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using static EventManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Services.Analytics;
 
 public enum PlayerMode
 {
@@ -53,7 +53,13 @@ public class HUDEventReciever : MonoBehaviour
                 {
                     count++;
                     int sceneId = SceneLoader.instance.actualSceneID;
-                    Debug.Log($"Lanzar Evento Human count: {count}");
+                    HumanEvent human = new HumanEvent
+                    {
+                        level = sceneId,
+                        count = count,
+                    };
+                    AnalyticsService.Instance.RecordEvent(human);
+                    Debug.Log($"Lanzar Evento Human count: {count} levelid: {sceneId}");
                 }
                 text.text = "HUMAN TURN";
                 break;

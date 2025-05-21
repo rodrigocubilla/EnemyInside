@@ -39,9 +39,9 @@ public class EventManager : MonoBehaviour
         public QuitEvent() : base("Quit") { }
         public int level { set { SetParameter("level", value); } }
     }
-    public class GameOver : AnalyticsEvent
+    public class GameOverEvent : AnalyticsEvent
     {
-        public GameOver() : base("GameOver") { }
+        public GameOverEvent() : base("GameOver") { }
         public int live { set { SetParameter("live", value); } }
     }
 }

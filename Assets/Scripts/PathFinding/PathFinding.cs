@@ -28,7 +28,7 @@ public class PathFinding : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindObjectOfType<PlayerController>()?.gameObject;
+        player = GameObject.FindFirstObjectByType<PlayerController>()?.gameObject;
 
         ConvertLevelTo3D(level);
     }

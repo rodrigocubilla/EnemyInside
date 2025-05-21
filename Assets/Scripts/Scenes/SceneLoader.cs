@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
+using static EventManager;
+using Unity.Services.Analytics;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -43,11 +45,16 @@ public class SceneLoader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex > 1)
+        if (scene.buildIndex > 2)
         {
             if (!isResetting)
             {
                 actualSceneID = scene.buildIndex - 2;
+                LevelStartEvent levelStart = new LevelStartEvent
+                {
+                    level = actualSceneID
+                };  
+                AnalyticsService.Instance.RecordEvent(levelStart);
                 Debug.Log($"Lanzar Level Start: {scene.name} id: {actualSceneID}");
             }
         }

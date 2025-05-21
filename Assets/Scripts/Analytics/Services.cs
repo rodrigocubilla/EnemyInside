@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class Services : MonoBehaviour
 {
-    //Escena anterior a menu de inicio para preguntar por colección de datos
-    //[SerializeField] private SceneController sceneController;
+    private SceneController sceneController;
     async void Awake()
     {
+        sceneController = GetComponent<SceneController>();
         try
         {
             await UnityServices.InitializeAsync();
@@ -23,12 +23,12 @@ public class Services : MonoBehaviour
     public void StartDataCollection()
     {
         AnalyticsService.Instance.StartDataCollection();
-        //sceneController.StartGame();
+        sceneController.StartGame();
     }
 
     //Iniciar juego sin recolección de datos
     public void StopDataCollection()
     {
-        //sceneController.StartGame();
+        sceneController.StartGame();
     }
 }
