@@ -714,11 +714,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: 01b2f9a2-1883-4f52-b651-604780e5b8b5
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: EnemyInside
+  organizationId: lucasduran510
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
