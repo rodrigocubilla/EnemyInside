@@ -24,11 +24,13 @@ public class Services : MonoBehaviour
     {
         AnalyticsService.Instance.StartDataCollection();
         sceneController.StartGame();
+        Debug.Log("start data collection");
     }
 
-    //Iniciar juego sin recolección de datos
+    //Iniciar juego sin recolecciï¿½n de datos
     public void StopDataCollection()
     {
         sceneController.StartGame();
+        Debug.Log("stop data collection");
     }
 }

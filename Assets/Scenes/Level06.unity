@@ -378,6 +378,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Box
       objectReference: {fileID: 0}
+    - target: {fileID: 6064649496657619226, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6064649496657619227, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
       propertyPath: m_RootOrder
       value: 16
@@ -1680,10 +1684,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.00052083336
+    x: 0
     y: 0
-    width: 0.76250005
-    height: 0.63703704
+    width: 0.5833334
+    height: 0.6111111
   near clip plane: 0.3
   far clip plane: 40.94
   field of view: 34
@@ -2427,6 +2431,10 @@ PrefabInstance:
     - target: {fileID: 6064649496657619226, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
       propertyPath: m_Name
       value: Box (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064649496657619226, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6064649496657619227, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
       propertyPath: m_RootOrder
@@ -7734,6 +7742,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 677034888822719567, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8098,6 +8110,10 @@ PrefabInstance:
     - target: {fileID: 677034888822719567, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
       propertyPath: m_Name
       value: Lava
+      objectReference: {fileID: 0}
+    - target: {fileID: 677034888822719567, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10144,6 +10160,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 677034888822719567, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10479,6 +10499,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lava (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 677034888822719567, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10561,6 +10585,10 @@ PrefabInstance:
     - target: {fileID: 6064649496657619226, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
       propertyPath: m_Name
       value: Box (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064649496657619226, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6064649496657619227, guid: 0620f1e8d6cb61241a8be73f258488c1, type: 3}
       propertyPath: m_RootOrder
@@ -10691,11 +10719,11 @@ PrefabInstance:
       objectReference: {fileID: 5850565235475083289}
     - target: {fileID: 2037937091358583974, guid: 40ffff412c91fa14eb0be2156bc681ec, type: 3}
       propertyPath: lives
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2037937091358583974, guid: 40ffff412c91fa14eb0be2156bc681ec, type: 3}
       propertyPath: moves
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2037937091358583974, guid: 40ffff412c91fa14eb0be2156bc681ec, type: 3}
       propertyPath: trail
@@ -10723,7 +10751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2037937091358583977, guid: 40ffff412c91fa14eb0be2156bc681ec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2037937091358583977, guid: 40ffff412c91fa14eb0be2156bc681ec, type: 3}
       propertyPath: m_LocalPosition.y

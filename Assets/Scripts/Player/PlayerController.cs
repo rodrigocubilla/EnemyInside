@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TrailRenderer trail;
     [SerializeField] private int lives;
     public int Lives { get => lives; private set => lives = value; }
-    
+
     public int moves = 10;
 
     private bool OnMoveRight => Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
@@ -54,11 +54,13 @@ public class PlayerController : MonoBehaviour
     {
         startMoves = moves;
 
-        pathFinding.OnPathFinded += (path) => {
+        pathFinding.OnPathFinded += (path) =>
+        {
             StartCoroutine(DoPath(path));
         };
 
-        pathFinding.OnCantReachPosition += () => {
+        pathFinding.OnCantReachPosition += () =>
+        {
             HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
             moves = startMoves;
             MaskReveal.OnRevealMask.Invoke();
@@ -70,17 +72,17 @@ public class PlayerController : MonoBehaviour
         sceneLoader = SceneLoader.instance;
     }
 
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
-        RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, .5f, solidLayers); 
-        RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, .5f, solidLayers); 
-        RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, .5f, solidLayers); 
-        RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down, .5f, solidLayers); 
+        RaycastHit2D hitRight = Physics2D.Raycast(transform.position, Vector2.right, .5f, solidLayers);
+        RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, Vector2.left, .5f, solidLayers);
+        RaycastHit2D hitUp = Physics2D.Raycast(transform.position, Vector2.up, .5f, solidLayers);
+        RaycastHit2D hitDown = Physics2D.Raycast(transform.position, Vector2.down, .5f, solidLayers);
 
-        hitPushableRight = Physics2D.Raycast(transform.position, Vector2.right, .5f, pusheableLayers); 
-        hitPushableLeft = Physics2D.Raycast(transform.position, Vector2.left, .5f, pusheableLayers); 
-        hitPushableUp = Physics2D.Raycast(transform.position, Vector2.up, .5f, pusheableLayers); 
-        hitPushableDown = Physics2D.Raycast(transform.position, Vector2.down, .5f, pusheableLayers); 
+        hitPushableRight = Physics2D.Raycast(transform.position, Vector2.right, .5f, pusheableLayers);
+        hitPushableLeft = Physics2D.Raycast(transform.position, Vector2.left, .5f, pusheableLayers);
+        hitPushableUp = Physics2D.Raycast(transform.position, Vector2.up, .5f, pusheableLayers);
+        hitPushableDown = Physics2D.Raycast(transform.position, Vector2.down, .5f, pusheableLayers);
 
         canMoveRight = hitRight ? false : true;
         canMoveLeft = hitLeft ? false : true;
@@ -99,7 +101,7 @@ public class PlayerController : MonoBehaviour
         Lava[] lavas = FindObjectsOfType<Lava>();
 
         if (killzones.Length == 0 && lavas.Length == 0) return;
-        
+
         KillZone killZone = null;
 
         foreach (KillZone kill in killzones)
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
             monsterMode = false;
             return;
         }
-        
+
         if (lava != null)
             pathFinding.PathFindToPoint(new Vector2Int((int)lava.gameObject.transform.position.x, (int)lava.gameObject.transform.position.y));
         else
@@ -141,24 +143,7 @@ public class PlayerController : MonoBehaviour
     {
         if (OnReset)
         {
-            monsterMode = false;
-            HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
-            MaskReveal.OnHideMask.Invoke();
-            lives = 5;
-            HUDLives.OnLifeChange.Invoke(lives);
-
-            int sceneId = SceneLoader.instance.actualSceneID;
-            bool didMove = moves > 0;
-            ResetEvent reset = new ResetEvent
-            {
-                level = sceneId,
-                move = didMove
-
-            };
-            Debug.Log($"Lanzar Evento Reset lvl:{sceneId}, move: {didMove}");
-            AnalyticsService.Instance.RecordEvent(reset);
-            sceneLoader.isResetting = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);   
+            ResetLevel();
         }
 
         if (lives <= 0)
@@ -178,7 +163,8 @@ public class PlayerController : MonoBehaviour
             {
                 HUDEventReciever.InvokeChangeMode(PlayerMode.Monster);
 
-                StartCoroutine(WaitFor(() => {
+                StartCoroutine(WaitFor(() =>
+                {
                     GoToRandomKillZone();
                 }, 1f));
                 //GoToRandomKillZone();
@@ -206,7 +192,8 @@ public class PlayerController : MonoBehaviour
             }
             canMove = false;
             LeanTween.move(gameObject, gameObject.transform.position + new Vector3(1, 0, 0), movementSpeed).setEaseOutQuad();
-            LeanTween.scale(gameObject, new Vector3(1, .8f, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() => {
+            LeanTween.scale(gameObject, new Vector3(1, .8f, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() =>
+            {
                 LeanTween.scale(gameObject, new Vector3(1, 1, 1), 0.02f).setEaseOutQuad();
                 canMove = true;
                 moves--;
@@ -224,7 +211,8 @@ public class PlayerController : MonoBehaviour
             }
             canMove = false;
             LeanTween.move(gameObject, gameObject.transform.position - new Vector3(1, 0, 0), movementSpeed).setEaseOutQuad();
-            LeanTween.scale(gameObject, new Vector3(1, .8f, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() => {
+            LeanTween.scale(gameObject, new Vector3(1, .8f, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() =>
+            {
                 LeanTween.scale(gameObject, new Vector3(1, 1, 1), 0.02f).setEaseOutQuad();
                 canMove = true;
                 moves--;
@@ -242,7 +230,8 @@ public class PlayerController : MonoBehaviour
             }
             canMove = false;
             LeanTween.move(gameObject, gameObject.transform.position + new Vector3(0, 1, 0), movementSpeed).setEaseOutQuad();
-            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() => {
+            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() =>
+            {
                 LeanTween.scale(gameObject, new Vector3(1, 1, 1), 0.02f).setEaseOutQuad();
                 canMove = true;
                 moves--;
@@ -260,7 +249,8 @@ public class PlayerController : MonoBehaviour
             }
             canMove = false;
             LeanTween.move(gameObject, gameObject.transform.position - new Vector3(0, 1, 0), movementSpeed).setEaseOutQuad();
-            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() => {
+            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() =>
+            {
                 LeanTween.scale(gameObject, new Vector3(1, 1, 1), 0.02f).setEaseOutQuad();
                 canMove = true;
                 moves--;
@@ -274,12 +264,13 @@ public class PlayerController : MonoBehaviour
         var waypoints = path;
 
         for (int i = 0; i < waypoints.Length; i++)
-        {   
-            yield return new WaitUntil( () => canMove );
+        {
+            yield return new WaitUntil(() => canMove);
 
             canMove = false;
             LeanTween.move(gameObject, new Vector3(waypoints[i].x, waypoints[i].y, 0), movementSpeed).setEaseOutQuad();
-            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() => {
+            LeanTween.scale(gameObject, new Vector3(.8f, 1, .8f), movementSpeed).setEaseOutQuad().setOnComplete(() =>
+            {
                 LeanTween.scale(gameObject, new Vector3(1, 1, 1), 0.02f).setEaseOutQuad();
                 canMove = true;
             });
@@ -324,5 +315,27 @@ public class PlayerController : MonoBehaviour
         HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
         lives--;
         HUDLives.OnLifeChange.Invoke(lives);
+    }
+
+    public void ResetLevel()
+    {
+        monsterMode = false;
+        HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
+        MaskReveal.OnHideMask.Invoke();
+        lives = 5;
+        HUDLives.OnLifeChange.Invoke(lives);
+
+        int sceneId = SceneLoader.instance.actualSceneID;
+        bool didMove = moves > 0;
+        ResetEvent reset = new ResetEvent
+        {
+            level = sceneId,
+            move = didMove
+
+        };
+        Debug.Log($"Lanzar Evento Reset lvl:{sceneId}, move: {didMove}");
+        AnalyticsService.Instance.RecordEvent(reset);
+        sceneLoader.isResetting = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
