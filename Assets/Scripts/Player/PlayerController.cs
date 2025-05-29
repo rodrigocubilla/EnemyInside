@@ -327,6 +327,8 @@ public class PlayerController : MonoBehaviour
 
         int sceneId = SceneLoader.instance.actualSceneID;
         bool didMove = moves > 0;
+
+        //Evento Reset
         ResetEvent reset = new ResetEvent
         {
             level = sceneId,

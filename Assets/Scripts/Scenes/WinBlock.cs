@@ -7,6 +7,8 @@ using static EventManager;
 public class WinBlock : MonoBehaviour
 {
     private int playerLives;
+    private bool _sent = false;
+
 
     private void Awake()
     {
@@ -14,6 +16,8 @@ public class WinBlock : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        if (_sent) return;
+
         Collider2D collider = Physics2D.OverlapBox(transform.position, new Vector2(0.2f, 0.2f), 0f);
 
         if (collider?.gameObject.tag == "Player")
@@ -40,7 +44,7 @@ public class WinBlock : MonoBehaviour
                 AnalyticsService.Instance.RecordEvent(gameOver);
                 Debug.Log("Lanzar Evento Game Over");
             }
-
+            _sent = true;
             SceneLoader.instance.ActivateScene();
         }
     }
