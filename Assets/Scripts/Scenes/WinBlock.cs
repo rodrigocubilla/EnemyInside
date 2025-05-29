@@ -39,7 +39,7 @@ public class WinBlock : MonoBehaviour
             {
                 GameOverEvent gameOver = new GameOverEvent
                 {
-                    live = playerLives,
+                    live = LoseLivesCounter.Instance.losingLives,
                 };
                 AnalyticsService.Instance.RecordEvent(gameOver);
                 Debug.Log("Lanzar Evento Game Over");

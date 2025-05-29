@@ -298,6 +298,7 @@ public class PlayerController : MonoBehaviour
         };
         AnalyticsService.Instance.RecordEvent(death);
         Debug.Log($"Lanzar evento Death. Modo: {mode}. Zona: {zone}");
+        LoseLivesCounter.Instance.losingLives++;
     }
 
     private IEnumerator RespawnAfterSeconds(float seconds)
