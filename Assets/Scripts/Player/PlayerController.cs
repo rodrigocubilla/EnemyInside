@@ -340,6 +340,8 @@ public class PlayerController : MonoBehaviour
 
         //Evento Reset
         StaticVariables.reset = true;
+        StaticVariables.gameOver++;
+        StaticVariables.totalGameOver++;
         GameOverEvent gameOver = new GameOverEvent
         {
             level = StaticVariables.level,
