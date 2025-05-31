@@ -23,6 +23,7 @@ public class WinBlock : MonoBehaviour
                 LevelCompleteEvent levelComplete = new LevelCompleteEvent
                 {
                     level = StaticVariables.level,
+                    gameOver = StaticVariables.gameOver,
                 };
                 AnalyticsService.Instance.RecordEvent(levelComplete);
                 Debug.Log($"Lanzar Level Complete id:{StaticVariables.level}, playerliv: {playerLives} gameOvers: {StaticVariables.gameOver}");
