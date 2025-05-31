@@ -141,16 +141,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (OnReset)
+        if (OnReset && moves<9)
         {
+            Debug.Log($"Moveess {moves}");
             ResetLevel();
-        }
-
-        if (lives <= 0)
-        {
-            lives = 5;
-            HUDLives.OnLifeChange.Invoke(lives);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         if (moves <= 0)
@@ -295,10 +289,10 @@ public class PlayerController : MonoBehaviour
         {
             mode = mode,
             killZone = zone,
+            level = StaticVariables.level,
         };
         AnalyticsService.Instance.RecordEvent(death);
         Debug.Log($"Lanzar evento Death. Modo: {mode}. Zona: {zone}");
-        LoseLivesCounter.Instance.losingLives++;
     }
 
     private IEnumerator RespawnAfterSeconds(float seconds)
@@ -315,6 +309,24 @@ public class PlayerController : MonoBehaviour
         monsterMode = false;
         HUDEventReciever.InvokeChangeMode(PlayerMode.Human, false);
         lives--;
+        if (lives <= 0)
+        {
+            StaticVariables.gameOver++;
+            StaticVariables.totalGameOver++;
+            StaticVariables.reset = false;
+            GameOverEvent gameOver = new GameOverEvent
+            {
+                level = StaticVariables.level,
+                reset = StaticVariables.reset,
+            };
+            AnalyticsService.Instance.RecordEvent(gameOver);
+
+            Debug.Log($"Lanzar evento GameOver. Level{StaticVariables.level} reset = {StaticVariables.reset}");
+            lives = 5;
+            HUDLives.OnLifeChange.Invoke(lives);
+            SceneLoader.instance.isGameOver = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         HUDLives.OnLifeChange.Invoke(lives);
     }
 
@@ -326,19 +338,18 @@ public class PlayerController : MonoBehaviour
         lives = 5;
         HUDLives.OnLifeChange.Invoke(lives);
 
-        int sceneId = SceneLoader.instance.actualSceneID;
-        bool didMove = moves > 0;
-
         //Evento Reset
-        ResetEvent reset = new ResetEvent
+        StaticVariables.reset = true;
+        GameOverEvent gameOver = new GameOverEvent
         {
-            level = sceneId,
-            move = didMove
-
+            level = StaticVariables.level,
+            reset = StaticVariables.reset,
         };
-        Debug.Log($"Lanzar Evento Reset lvl:{sceneId}, move: {didMove}");
-        AnalyticsService.Instance.RecordEvent(reset);
+        AnalyticsService.Instance.RecordEvent(gameOver);
+        Debug.Log($"Lanzar evento GameOver. Level{StaticVariables.level} reset = {StaticVariables.reset}");
         sceneLoader.isResetting = true;
+        SceneLoader.instance.StopAllCoroutines();
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

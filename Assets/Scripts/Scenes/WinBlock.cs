@@ -9,12 +9,6 @@ public class WinBlock : MonoBehaviour
     private int playerLives;
     private bool _sent = false;
 
-
-    private void Awake()
-    {
-        playerLives = FindFirstObjectByType<PlayerController>().Lives;
-    }
-
     private void FixedUpdate() {
         if (_sent) return;
 
@@ -22,27 +16,27 @@ public class WinBlock : MonoBehaviour
 
         if (collider?.gameObject.tag == "Player")
         {
-            int sceneId = SceneLoader.instance.actualSceneID;
 
             if (SceneManager.GetActiveScene().buildIndex != 9)
             {
-                int losingLives = 5 - playerLives;
+                playerLives = FindFirstObjectByType<PlayerController>().Lives;
                 LevelCompleteEvent levelComplete = new LevelCompleteEvent
                 {
-                    level = SceneLoader.instance.actualSceneID,
-                    live = losingLives,
+                    level = StaticVariables.level,
                 };
                 AnalyticsService.Instance.RecordEvent(levelComplete);
-                Debug.Log("Lanzar Level Complete");
+                Debug.Log($"Lanzar Level Complete id:{StaticVariables.level}, playerliv: {playerLives} gameOvers: {StaticVariables.gameOver}");
             }
             else
             {
-                GameOverEvent gameOver = new GameOverEvent
+                //Remplazar por gameFinished
+                GameFinishEvent gameFinish = new GameFinishEvent
                 {
-                    live = LoseLivesCounter.Instance.losingLives,
+                    level = StaticVariables.level,
+                    gameOver = StaticVariables.totalGameOver
                 };
-                AnalyticsService.Instance.RecordEvent(gameOver);
-                Debug.Log("Lanzar Evento Game Over");
+                AnalyticsService.Instance.RecordEvent(gameFinish);
+                Debug.Log($"Lanzar Evento Game Finish level: {StaticVariables.level} gameOvers: {StaticVariables.totalGameOver}");
             }
             _sent = true;
             SceneLoader.instance.ActivateScene();

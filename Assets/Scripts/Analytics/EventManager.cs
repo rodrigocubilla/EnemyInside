@@ -14,19 +14,14 @@ public class EventManager : MonoBehaviour
     {
         public LevelCompleteEvent() : base("LevelComplete") { }
         public int level { set { SetParameter("level", value); } }
-        public int live { set { SetParameter("live", value); } }
-    }
-    public class ResetEvent : AnalyticsEvent
-    {
-        public ResetEvent() : base("Reset") { }
-        public int level { set { SetParameter("level", value); } }
-        public bool move { set { SetParameter("move", value); } }
+        public int gameOver { set { SetParameter("gameOver", value); } }
     }
     public class DeathEvent : AnalyticsEvent
     {
         public DeathEvent() : base("Death") { }
         public string mode { set { SetParameter("mode", value); } }
         public string killZone { set { SetParameter("killZone", value); } }
+        public int level { set { SetParameter("level", value); } }
     }
     public class HumanEvent : AnalyticsEvent
     {
@@ -34,14 +29,16 @@ public class EventManager : MonoBehaviour
         public int level { set { SetParameter("level", value); } }
         public int count { set { SetParameter("count", value); } }
     }
-    public class QuitEvent : AnalyticsEvent
-    {
-        public QuitEvent() : base("Quit") { }
-        public int level { set { SetParameter("level", value); } }
-    }
     public class GameOverEvent : AnalyticsEvent
     {
         public GameOverEvent() : base("GameOver") { }
-        public int live { set { SetParameter("live", value); } }
+        public int level { set { SetParameter("level", value); } }
+        public bool reset { set { SetParameter("reset", value); } }
+    }
+    public class GameFinishEvent : AnalyticsEvent
+    {
+        public GameFinishEvent() : base("GameFinish") { }
+        public int level { set { SetParameter("level", value); } }
+        public int gameOver { set { SetParameter("gameOver", value); } }
     }
 }

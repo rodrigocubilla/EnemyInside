@@ -13,17 +13,27 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader instance {private set; get;}
     public bool isResetting = false;
+    public bool isGameOver = false;
     public int actualSceneID { get; private set; }
 
     private AsyncOperation _asyncOperation;
 
     [SerializeField] private List<string> scenes = new List<string>();
-    
 
-    private void Awake() {
-        DontDestroyOnLoad(this);
 
-        instance = this;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            // Ya existía otro SceneLoader, así que nos destruimos
+            Destroy(gameObject);
+            return;
+        }
     }
 
 #if UNITY_EDITOR
@@ -45,18 +55,28 @@ public class SceneLoader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // 1) Si estamos en modo “reset” (R) -> NO debemos emitir LevelStart
+        if (isResetting || isGameOver)
+        {
+            isResetting = false;
+            isGameOver = false;
+            return;
+        }
+
+        // 2) Si llegamos aquí, es que no es un reset; lanzamos el LevelStart
         if (scene.buildIndex > 2)
         {
-            if (!isResetting)
+            actualSceneID = scene.buildIndex - 2;
+            StaticVariables.level = actualSceneID;
+
+            LevelStartEvent levelStart = new LevelStartEvent
             {
-                actualSceneID = scene.buildIndex - 2;
-                LevelStartEvent levelStart = new LevelStartEvent
-                {
-                    level = actualSceneID
-                };  
-                AnalyticsService.Instance.RecordEvent(levelStart);
-                Debug.Log($"Lanzar Level Start: {scene.name} id: {actualSceneID}");
-            }
+                level = StaticVariables.level
+            };
+            AnalyticsService.Instance.RecordEvent(levelStart);
+            Debug.Log($"Lanzar Level Start: {scene.name} id: {actualSceneID}");
+
+            StaticVariables.reset = false;
         }
     }
 
@@ -76,6 +96,16 @@ public class SceneLoader : MonoBehaviour
     {
         StartCoroutine(ActivateSceneAndDeactivate());
     }
+    public void CancelPendingAsyncLoad()
+    {
+        if (_asyncOperation != null && !_asyncOperation.isDone)
+        {
+            // Para “anularla” basta con perder la referencia.
+            // También podrías forzar allowSceneActivation = false, pero en la práctica
+            // si nunca le vuelves a dar “true” nunca se activará.
+            _asyncOperation = null;
+        }
+    }
 
     private IEnumerator LoadSceneAsyncProcess(string sceneName)
     {
@@ -94,6 +124,7 @@ public class SceneLoader : MonoBehaviour
         yield return new WaitUntil( () => {return _asyncOperation.progress > 0.8f;} );
         _asyncOperation.allowSceneActivation = true;
         isResetting = false;
+        isGameOver = false;
         yield return new WaitUntil( () => {return _asyncOperation.isDone;} );
         _asyncOperation.allowSceneActivation = false;
     }
