@@ -23,7 +23,7 @@ public class HUDMovesView : MonoBehaviour
         switch (mode)
         {
             case PlayerMode.Monster:
-                LeanTween.moveY(gameObject, -8f, 0.5f).setEase(easeType);
+                LeanTween.moveY(gameObject, -18f, 0.5f).setEase(easeType);
                 isHuman = false;
                 break;
             case PlayerMode.Human:

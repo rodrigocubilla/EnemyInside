@@ -1503,10 +1503,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.0008064516
     y: 0
-    width: 1
-    height: 1
+    width: 1.1709677
+    height: 0.9166667
   near clip plane: 0.3
   far clip plane: 40.94
   field of view: 34
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
   m_AssetsPPU: 32
-  m_RefResolutionX: 132
+  m_RefResolutionX: 179
   m_RefResolutionY: 300
   m_CropFrame: 0
   m_GridSnapping: 2
@@ -7912,7 +7912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 677034888822719561, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: -1.04
       objectReference: {fileID: 0}
     - target: {fileID: 677034888822719561, guid: f725385b577572748b0840cfc4db8dcb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10807,7 +10807,7 @@ Transform:
   m_GameObject: {fileID: 5850565235475083288}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: 0, y: 16.93, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
