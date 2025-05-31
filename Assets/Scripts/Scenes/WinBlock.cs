@@ -17,7 +17,7 @@ public class WinBlock : MonoBehaviour
         if (collider?.gameObject.tag == "Player")
         {
 
-            if (SceneManager.GetActiveScene().buildIndex != 9)
+            if (SceneManager.GetActiveScene().buildIndex != 12)
             {
                 playerLives = FindFirstObjectByType<PlayerController>().Lives;
                 LevelCompleteEvent levelComplete = new LevelCompleteEvent
@@ -37,6 +37,7 @@ public class WinBlock : MonoBehaviour
                 };
                 AnalyticsService.Instance.RecordEvent(gameFinish);
                 Debug.Log($"Lanzar Evento Game Finish level: {StaticVariables.level} gameOvers: {StaticVariables.totalGameOver}");
+                SceneManager.LoadScene("EndGame");
             }
             _sent = true;
             SceneLoader.instance.ActivateScene();
