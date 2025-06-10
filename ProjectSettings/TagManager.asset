@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Pushable
+  - TutorialCanvas
+  - GlobalLight
+  - BoxLight
+  - GoalLight
   layers:
   - Default
   - TransparentFX

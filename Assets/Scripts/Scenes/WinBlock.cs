@@ -17,7 +17,7 @@ public class WinBlock : MonoBehaviour
         if (collider?.gameObject.tag == "Player")
         {
 
-            if (SceneManager.GetActiveScene().buildIndex != 12)
+            if (SceneManager.GetActiveScene().buildIndex < 12)
             {
                 playerLives = FindFirstObjectByType<PlayerController>().Lives;
                 LevelCompleteEvent levelComplete = new LevelCompleteEvent

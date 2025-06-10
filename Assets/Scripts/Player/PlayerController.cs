@@ -50,6 +50,9 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D hitPushableUp;
     private RaycastHit2D hitPushableDown;
 
+    //Eventos
+    public static event Action onAnyMovementKey;
+
     private void Start()
     {
         startMoves = moves;
@@ -174,6 +177,12 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
 
         if (!canMove) return;
+
+        if ((OnMoveRight && canMoveRight) || (OnMoveLeft && canMoveLeft) || (OnMoveDown && canMoveDown) || (OnMoveUp && canMoveUp)) 
+        {
+            //Lanzar evento onAnyMovementKey;
+            onAnyMovementKey?.Invoke();
+        }
 
         if (OnMoveRight && canMoveRight)
         {
