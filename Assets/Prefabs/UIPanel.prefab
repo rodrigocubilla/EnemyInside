@@ -226,9 +226,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positions:
-  - {x: 320, y: 53, z: 0}
-  - {x: -329, y: -133, z: 0}
-  - {x: 464, y: 145, z: 0}
+  - {x: 0, y: 200, z: 0}
+  - {x: 0, y: 200, z: 0}
+  - {x: 0, y: 200, z: 0}
   scales:
   - {x: 730, y: 140}
   - {x: 730, y: 140}
