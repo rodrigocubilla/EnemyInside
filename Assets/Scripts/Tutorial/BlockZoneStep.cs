@@ -12,7 +12,7 @@ public class BlockZoneStep : TutorialStep
     private GameObject canvas;
     private Light2D globalLight;
     private Light2D playerLight;
-    private Light2D boxLight;
+    private GameObject[] boxLight;
     private int remaining;
 
     public override void Enter(int current)
@@ -21,7 +21,7 @@ public class BlockZoneStep : TutorialStep
         zones = FindObjectsByType<KillZone>(FindObjectsSortMode.None).ToList<KillZone>();
         globalLight = GameObject.FindWithTag("GlobalLight").GetComponent<Light2D>();
         playerLight = FindObjectOfType<PlayerController>().GetComponent<Light2D>();
-        boxLight = GameObject.FindWithTag("BoxLight").GetComponent<Light2D>();
+        boxLight = GameObject.FindGameObjectsWithTag("BoxLight");
         canvas = GameObject.FindWithTag("TutorialCanvas");
 
         remaining = zones.Count;
@@ -30,7 +30,12 @@ public class BlockZoneStep : TutorialStep
         //Disminuir luz global
         globalLight.intensity = 0.04f;
         playerLight.intensity = 1f;
-        boxLight.intensity = 1f;
+
+        foreach (GameObject box in boxLight)
+        {
+            LightPulse light = box.GetComponent<LightPulse>();
+            light.Highlight();
+        }
 
         foreach (KillZone z in zones)
         {
@@ -49,7 +54,11 @@ public class BlockZoneStep : TutorialStep
 
     public override void Exit()
     {
-        boxLight.intensity = 0f;
+        foreach (GameObject box in boxLight)
+        {
+            LightPulse light = box.GetComponent<LightPulse>();
+            light.OffLight();
+        }
         foreach (KillZone z in zones)
         {
             z.OffLight();

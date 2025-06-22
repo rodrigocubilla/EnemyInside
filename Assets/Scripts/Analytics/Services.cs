@@ -30,6 +30,7 @@ public class Services : MonoBehaviour
     //Iniciar juego sin recolecci�n de datos
     public void StopDataCollection()
     {
+        AnalyticsService.Instance.StartDataCollection();
         sceneController.StartGame();
         Debug.Log("stop data collection");
     }

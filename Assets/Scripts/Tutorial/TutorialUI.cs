@@ -6,19 +6,21 @@ using UnityEngine;
 public class TutorialUI : MonoBehaviour
 {
     private RectTransform rectTransform;
-    private TextMeshProUGUI text;
+    private TextMeshProUGUI[] text;
+    [SerializeField] int minSize = 120; 
+    [SerializeField] int maxSize = 136;
 
     [SerializeField] private List<Vector3> positions;
     [SerializeField] private List<Vector2> scales;
 
     public void ShowMessage(string message, int current) {
         rectTransform = GetComponent<RectTransform>();
-        text = GetComponentInChildren<TextMeshProUGUI>();
+        text = GetComponentsInChildren<TextMeshProUGUI>();
 
         rectTransform.localPosition = positions[current];
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scales[current].x);
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, scales[current].y);
-        text.text = message;
+        text[0].text = message;
 
         StartCoroutine(TextPulse());
     }
@@ -35,7 +37,10 @@ public class TutorialUI : MonoBehaviour
 
             float smooth = Mathf.SmoothStep(0f, 1f, t);
 
-            text.fontSize = Mathf.Lerp(120, 136, smooth);
+            foreach (TextMeshProUGUI i in text)
+            {
+                i.fontSize = Mathf.Lerp(minSize, maxSize, smooth);
+            }
             yield return null;
         }
     }
